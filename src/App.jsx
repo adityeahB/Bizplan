@@ -1,5 +1,4 @@
 import React from 'react';
-import { useTranslation } from 'react-i18next';
 import { AppProvider, useApp } from './contexts/AppContext';
 import GDPRBanner from './components/GDPRBanner';
 import LanguageSwitcher from './components/LanguageSwitcher';
@@ -7,32 +6,11 @@ import Progress from './components/Progress';
 import Stepper from './components/Stepper';
 import QuestionCard from './components/QuestionCard';
 import { generatePDF } from './pdf/pdfGenerator';
+import { useTranslation } from 'react-i18next';
 
 function AppContent() {
   const { t } = useTranslation();
   const { currentSection, setCurrentSection, allSectionsCompleted, answers, sections } = useApp();
-
-  const handleNext = () => {
-    if (currentSection < sections.length - 1) {
-      setCurrentSection(currentSection + 1);
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-  };
-
-  const handleBack = () => {
-    if (currentSection > 0) {
-      setCurrentSection(currentSection - 1);
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-  };
-
-  const handleCompleteAndPDF = () => {
-    if (allSectionsCompleted()) {
-      generatePDF(answers, t);
-    } else {
-      alert(t('complete_all_sections_first', 'Please complete all sections before generating PDF.'));
-    }
-  };
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -42,7 +20,6 @@ function AppContent() {
           <LanguageSwitcher />
         </div>
       </header>
-
       <main className="max-w-3xl mx-auto px-4 py-8">
         <Progress />
         <Stepper />
@@ -50,50 +27,20 @@ function AppContent() {
           <h2 className="text-2xl font-heading mb-6">{t(sections[currentSection]?.titleKey)}</h2>
           <QuestionCard />
           <div className="flex justify-between mt-8 gap-4">
-            <button
-              onClick={handleBack}
-              disabled={currentSection === 0}
-              className={`px-5 py-2 rounded-full font-medium transition ${
-                currentSection === 0 ? 'bg-gray-200 cursor-not-allowed' : 'bg-gray-200 hover:bg-gray-300'
-              }`}
-            >
-              {t('back')}
-            </button>
-            {currentSection === sections.length - 1 ? (
-              <button
-                onClick={handleCompleteAndPDF}
-                className="bg-accent hover:bg-amber-600 text-white px-5 py-2 rounded-full font-medium transition"
-              >
-                {t('complete')}
-              </button>
+            <button onClick={() => setCurrentSection(Math.max(0, currentSection-1))} disabled={currentSection===0} className="px-5 py-2 rounded-full bg-gray-200 disabled:opacity-50">Back</button>
+            {currentSection === sections.length-1 ? (
+              <button onClick={() => allSectionsCompleted() ? generatePDF(answers, t) : alert(t('complete_all_sections_first'))} className="bg-accent text-white px-5 py-2 rounded-full">Complete & PDF</button>
             ) : (
-              <button
-                onClick={handleNext}
-                className="bg-primary hover:bg-teal-800 text-white px-5 py-2 rounded-full font-medium transition"
-              >
-                {t('next')}
-              </button>
+              <button onClick={() => setCurrentSection(currentSection+1)} className="bg-primary text-white px-5 py-2 rounded-full">Next</button>
             )}
           </div>
-          {allSectionsCompleted() && (
-            <div className="mt-6 p-4 bg-green-50 text-green-800 rounded-lg text-center">
-              {t('complete_success')}
-            </div>
-          )}
         </div>
       </main>
-
       <GDPRBanner />
     </div>
   );
 }
 
-function App() {
-  return (
-    <AppProvider>
-      <AppContent />
-    </AppProvider>
-  );
+export default function App() {
+  return <AppProvider><AppContent /></AppProvider>;
 }
-
-export default App;
