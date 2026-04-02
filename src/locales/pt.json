@@ -1,4 +1,5 @@
- "app_title": "Construtor de Plano de Negócios – Portugal",
+"pt": {
+    "app_title": "Construtor de Plano de Negócios – Portugal",
     "gdpr_banner": "Este website não utiliza cookies. Apenas guardamos o seu progresso localmente no seu dispositivo. Não são recolhidos nem partilhados dados pessoais.",
     "gdpr_ok": "OK, percebi",
     "privacy_policy": "Política de Privacidade",
@@ -31,3 +32,4 @@
     "pdf_section4": "4. Gestão Estratégica",
     "pdf_section5": "5. Implementação e Monitorização",
     "pdf_section6": "6. Lista de Verificação Final"
+  }
