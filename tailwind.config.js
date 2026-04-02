@@ -1,4 +1,3 @@
-/** @type {import('tailwindcss').Config} */
 export default {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
@@ -8,8 +7,8 @@ export default {
         heading: ['Playfair Display', 'serif'],
       },
       colors: {
-        primary: '#0f3b3f',   // deep teal
-        accent: '#d68c3c',    // soft gold/orange
+        primary: '#0f3b3f',
+        accent: '#d68c3c',
       }
     },
   },
